@@ -15,7 +15,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Produto  implements Serializable {
@@ -27,6 +27,22 @@ public class Produto  implements Serializable {
 	private String nome;
 	private double preco;
 	
+	@JsonIgnore
+	@ManyToMany
+	@JoinTable(name = "PRODUTO_CATEGORIA", 
+		joinColumns = @JoinColumn(name = "produto_id"),
+		inverseJoinColumns = @JoinColumn(name = "categoria_id")
+	)
+	private List<Categoria> categorias = new ArrayList<>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="id.produto")
+	private Set<ItemPedido> itens = new HashSet<>();
+	
+	public Produto() {
+	}
+	
+	@JsonIgnore
 	public List<Pedido> getPedidos(){
 		List<Pedido> lista = new ArrayList<>();
 		for (ItemPedido x : itens) {
@@ -35,26 +51,13 @@ public class Produto  implements Serializable {
 		return lista;
 	}
 	
-	@JsonBackReference
-	@ManyToMany
-	@JoinTable(name = "PRODUTO_CATEGORIA", 
-		joinColumns = @JoinColumn(name = "produto_id"),
-		inverseJoinColumns = @JoinColumn(name = "categoria_id")
-	)
-	private List<Categoria> categorias = new ArrayList<>();
-	
-	@OneToMany(mappedBy="id.produto")
-	private Set<ItemPedido> itens = new HashSet<>();
-	public Produto() {
-	}
-
 	public Produto(Integer id, String nome, double preco) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
 	}
-
+	
 	public Integer getId() {
 		return id;
 	}
@@ -71,21 +74,20 @@ public class Produto  implements Serializable {
 		this.nome = nome;
 	}
 
-	public Set<ItemPedido> getItens() {
-		return itens;
-	}
-
-	public void setItens(Set<ItemPedido> itens) {
-		this.itens = itens;
-	}
-	
-
 	public double getPreco() {
 		return preco;
 	}
 
 	public void setPreco(double preco) {
 		this.preco = preco;
+	}
+
+	public void setItens(Set<ItemPedido> itens) {
+		this.itens = itens;
+	}
+	
+	public Set<ItemPedido> getItens() {
+		return itens;
 	}
 
 	public List<Categoria> getCategorias() {

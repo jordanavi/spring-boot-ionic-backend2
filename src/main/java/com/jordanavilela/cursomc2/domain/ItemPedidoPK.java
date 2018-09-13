@@ -3,12 +3,8 @@ package com.jordanavilela.cursomc2.domain;
 import java.io.Serializable;
 
 import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
 
 @Embeddable
 public class ItemPedidoPK implements Serializable {
@@ -35,6 +31,7 @@ public class ItemPedidoPK implements Serializable {
 	public void setProduto(Produto produto) {
 		this.produto = produto;
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -43,6 +40,7 @@ public class ItemPedidoPK implements Serializable {
 		result = prime * result + ((produto == null) ? 0 : produto.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
